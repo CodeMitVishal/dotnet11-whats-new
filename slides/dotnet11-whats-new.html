@@ -1,0 +1,630 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>.NET 11: What's new</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap"><style>
+@page { size: 1920px 1080px; margin: 0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: #121826; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+section { position: relative; width: 1920px; height: 1080px; overflow: hidden; break-after: page;
+  background: #F6F4EE; color: #3F4859; font-family: 'Space Grotesk', Arial, sans-serif;
+  padding: 100px 128px 140px; display: flex; flex-direction: column; gap: 44px; }
+section:last-child { break-after: auto; }
+.eyebrow { font-size: 24px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #2F5E9E; }
+h2 { font-size: 60px; font-weight: 700; line-height: 1.1; letter-spacing: -1px; color: #121826; margin-top: 10px; }
+.row { display: flex; gap: 48px; align-items: flex-start; }
+.col { display: flex; flex-direction: column; gap: 22px; }
+.code { background: #1C2436; border-radius: 20px; padding: 28px 36px; font-family: 'Roboto Mono', monospace;
+  font-size: 27px; line-height: 1.5; color: #E6E9F0; white-space: pre; }
+.k { color: #F2C14E; } .s { color: #8EC5FF; } .c { color: #8A93A6; } .g { color: #7EE2A8; }
+.note { border-left: 4px solid #2F5E9E; padding: 4px 0 4px 22px; font-size: 29px; line-height: 1.4; }
+.note b, .card b, td b { color: #121826; }
+.m { font-family: 'Roboto Mono', monospace; font-size: .88em; background: #ECE8DC; padding: 1px 8px; border-radius: 6px; color: #121826; }
+.card { background: #FFFDF8; border: 1px solid #E3DFD3; border-radius: 18px; padding: 26px 30px; display: flex; flex-direction: column; gap: 10px; }
+.card h3 { font-size: 30px; color: #121826; }
+.card p { font-size: 27px; line-height: 1.4; }
+.tag { align-self: flex-start; font-size: 20px; font-weight: 700; letter-spacing: 2px; padding: 5px 14px; border-radius: 999px; background: #121826; color: #F2C14E; }
+.tip { background: #F2C14E; color: #121826; border-radius: 16px; padding: 18px 26px; font-size: 27px; line-height: 1.4; }
+table { border-collapse: collapse; font-size: 27px; width: 100%; }
+th { text-align: left; font-size: 20px; letter-spacing: 2px; text-transform: uppercase; color: #6B7385; padding: 8px 14px; border-bottom: 2px solid #DCD7CA; }
+td { padding: 10px 14px; border-bottom: 1px solid #E3DFD3; vertical-align: top; }
+/* channel branding: icon + footer on every slide */
+section::before { content: ""; position: absolute; left: 128px; bottom: 44px; width: 46px; height: 46px;
+  background: url("channel-icon.png") center / contain no-repeat; }
+.foot-l { position: absolute; left: 188px; bottom: 56px; font-size: 22px; color: #6B7385; }
+.foot-l::before { content: "CodeMitVishal  ·  "; font-weight: 700; color: #2F5E9E; white-space: pre; }
+section.dark .foot-l::before { color: #F2C14E; }
+section.cover::before { display: none; }                       /* the cover shows a big logo instead */
+section.cover .foot-l { left: 128px; }
+.brand-big { position: absolute; right: 128px; top: 100px; width: 230px; height: 230px; }
+.foot-r { position: absolute; right: 128px; bottom: 56px; font-size: 22px; color: #2F5E9E; }
+/* dark slides */
+section.dark { background: #121826; color: #C9D2E3; }
+section.dark h1 { font-size: 92px; line-height: 1.02; color: #fff; letter-spacing: -2px; }
+section.dark .foot-l { color: #6B7385; } section.dark .foot-r { color: #8EC5FF; }
+.num { font-size: 30px; font-weight: 700; letter-spacing: 4px; color: #F2C14E; }
+.big { font-size: 160px; font-weight: 700; color: #F2C14E; line-height: .9; }
+.toc { display: flex; flex-direction: column; gap: 4px; }
+.toc div { display: flex; justify-content: space-between; gap: 40px; font-size: 27px; padding: 12px 0; border-bottom: 1px solid #2A3550; }
+.toc span:last-child { font-family: 'Roboto Mono', monospace; font-size: 22px; color: #8EC5FF; }
+.pill { display: inline-block; font-size: 22px; padding: 6px 16px; border-radius: 999px; border: 2px solid #2F5E9E; color: #2F5E9E; font-weight: 700; margin-right: 8px; }
+svg text { font-family: 'Space Grotesk', Arial, sans-serif; }
+svg .mono { font-family: 'Roboto Mono', monospace; }
+
+
+.term { background: #0B0F18; border: 2px solid #2A3550; border-radius: 16px; padding: 18px 28px 20px;
+  font-family: 'Roboto Mono', monospace; color: #E6E9F0; white-space: pre; line-height: 1.45; }
+.term .cmd { color: #7EE2A8; } .term .lbl { display: block; font-family: 'Space Grotesk', Arial, sans-serif;
+  font-size: 18px; letter-spacing: 3px; color: #8A93A6; margin-bottom: 6px; font-weight: 700; }
+.ba-h { font-size: 24px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px;
+  border-radius: 999px; align-self: flex-start; }
+.ba-old { background: #E8E3D6; color: #6B7385; } .ba-new { background: #121826; color: #7EE2A8; }
+.agenda { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.agenda .card { min-height: 250px; }
+.agenda .n { font-size: 64px; font-weight: 700; color: #F2C14E; line-height: 1; }
+.agenda .card { background: #121826; border: none; } .agenda h3 { color: #fff; font-size: 34px; }
+.agenda p { color: #C9D2E3; }
+.kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.kpi div { background: #FFFDF8; border: 1px solid #E3DFD3; border-radius: 18px; padding: 24px 26px; }
+.kpi b { display: block; font-size: 52px; color: #2F5E9E; line-height: 1.1; }
+.kpi > div > span { font-size: 24px; line-height: 1.35; display: block; margin-top: 8px; }
+td.ok { color: #1F7A4A; font-weight: 700; } td.old { color: #B4462F; font-weight: 700; }
+</style></head><body>
+<section class="dark cover" style="justify-content:center;gap:28px">
+  <img class="brand-big" src="channel-icon.png" alt="CodeMitVishal logo">
+  <p class="num">.NET 11 · RELEASED 10 NOVEMBER 2026</p><h1>.NET 11: What's new</h1>
+  <p style="font-size:40px;color:#E6E9F0;max-width:1300px;line-height:1.3">C# 15, a faster runtime, handier libraries and a quicker SDK, explained with <b style="color:#7EE2A8">code you can run</b>.</p>
+  <div style="display:flex;gap:60px;margin-top:30px"><div><p class="big" style="font-size:96px">C# 15</p><p style="font-size:24px">new language version</p></div><div><p class="big" style="font-size:96px">2 years</p><p style="font-size:24px">of support (STS)</p></div><div><p class="big" style="font-size:96px">18</p><p style="font-size:24px">runnable examples</p></div></div>
+  <p class="foot-l">.NET 11: What's new</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">Agenda</p><h2>What we'll cover</h2></div>
+  <div class="agenda">
+    <div class="card"><span class="n">1</span><h3>The release</h3><p>Support dates, and who should upgrade.</p></div>
+    <div class="card"><span class="n">2</span><h3>C# 15</h3><p>Unions, closed hierarchies, <span style="font-family:'Roboto Mono'">with(...)</span>, extension indexers, labeled loops.</p></div>
+    <div class="card"><span class="n">3</span><h3>Libraries</h3><p>Process, LINQ joins, JSON unions, Zstandard, async validation, decimals.</p></div>
+    <div class="card"><span class="n">4</span><h3>Runtime</h3><p>Runtime Async, JIT wins you get for free, new CPU baseline.</p></div>
+    <div class="card"><span class="n">5</span><h3>SDK &amp; tooling</h3><p>File-based apps, a faster CLI, better <span style="font-family:'Roboto Mono'">dotnet test</span>.</p></div>
+    <div class="card"><span class="n">6</span><h3>Upgrade</h3><p>Ecosystem changes and a 4-step upgrade checklist.</p></div>
+  </div>
+  <p class="foot-l">.NET 11 · Agenda</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">The release</p><h2>Supported versions after 10 November 2026</h2></div>
+  <div class="row"><table style="flex:1"><tr><th>Version</th><th>Type</th><th>Released</th><th>Support ends</th></tr><tr><td><b>.NET 11</b></td><td>STS</td><td>10 Nov 2026</td><td><span style="color:#1F7A4A;font-weight:700">14 Nov 2028</span></td></tr><tr><td><b>.NET 10</b></td><td>LTS</td><td>11 Nov 2025</td><td><span style="color:#1F7A4A;font-weight:700">14 Nov 2028</span></td></tr><tr><td><b>.NET 9</b></td><td>STS</td><td>12 Nov 2024</td><td><span style="color:#B4462F;font-weight:700">ended 10 Nov 2026</span></td></tr><tr><td><b>.NET 8</b></td><td>LTS</td><td>14 Nov 2023</td><td><span style="color:#B4462F;font-weight:700">ended 10 Nov 2026</span></td></tr></table><div class="col" style="width:620px"><p class="note"><b>LTS</b> = Long-Term Support: 3 years.</p><p class="note"><b>STS</b> = Standard-Term Support: 2 years.</p><p class="note">So .NET 10 and .NET 11 are both supported until <b>November 2028</b>.</p><p class="tip">Still on .NET 8 or 9? You no longer get security fixes. Move to 10 (LTS) or 11 (STS).</p></div></div>
+  <p class="foot-l">.NET 11 · The release</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section class="dark" style="flex-direction:row;align-items:center;gap:100px">
+  <div style="width:640px;display:flex;flex-direction:column;gap:20px">
+    <p class="num">PART</p><p class="big">1</p>
+    <h1 style="font-size:80px">C# 15</h1>
+    <p style="font-size:30px;line-height:1.4">The default language version for net11.0. No preview flag needed (except memory safety).</p></div>
+  <div style="flex:1" class="toc"><p class="num" style="font-size:22px;margin-bottom:10px">IN THIS PART</p><div><span>Union types</span><span>01, 02</span></div><div><span>Closed hierarchies</span><span>03</span></div><div><span>Collection expression arguments</span><span>04</span></div><div><span>Extension indexers</span><span>05</span></div><div><span>Labeled break and continue</span><span>06</span></div><div><span>Memory safety (preview)</span><span>07</span></div></div>
+  <p class="foot-l">.NET 11: What's new · Part 1</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">C# 15 · Union types</p><h2>One value, one of a fixed set of types</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:20px;padding:24px 32px"><span class="c">// Implicit conversion: a Dog is a Pet</span>
+Pet pet = <span class="k">new</span> Dog(<span class="s">&quot;Rex&quot;</span>);
+Console.WriteLine(Describe(pet));
+
+pet = <span class="k">new</span> Cat(<span class="s">&quot;Misty&quot;</span>);
+Console.WriteLine(Describe(pet));
+
+<span class="c">// Every case is handled, so no &quot;default&quot; arm</span>
+<span class="k">static</span> <span class="k">string</span> Describe(Pet pet) =&gt; pet <span class="k">switch</span>
+{
+    Dog d  =&gt; <span class="s">$&quot;{d.Name} barks&quot;</span>,
+    Cat c  =&gt; <span class="s">$&quot;{c.Name} meows&quot;</span>,
+    Bird b =&gt; <span class="s">$&quot;{b.Name} sings&quot;</span>,
+};
+
+<span class="k">public</span> <span class="k">record</span> Cat(<span class="k">string</span> Name);
+<span class="k">public</span> <span class="k">record</span> Dog(<span class="k">string</span> Name);
+<span class="k">public</span> <span class="k">record</span> Bird(<span class="k">string</span> Name);
+
+<span class="c">// A Pet is exactly one of: Cat, Dog or Bird</span>
+<span class="k">public</span> <span class="k">union</span> Pet(Cat, Dog, Bird);</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note"><span class="m">union Pet(Cat, Dog, Bird)</span>: a Pet is <b>exactly one</b> of these three.</p><p class="note">Each case converts automatically: <span class="m">Pet pet = new Dog("Rex")</span>.</p><p class="note">The compiler checks that your <span class="m">switch</span> handles <b>every</b> case: no <span class="m">default</span> arm needed.</p><p class="tip">Add a fourth case later? Every switch that misses it gets a compiler warning.</p><div class="term" style="font-size:24px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 01-union-types.cs</span>
+Rex barks
+Misty meows</div></div></div>
+  <p class="foot-l">.NET 11 · C# 15</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:30px">
+  <div><p class="eyebrow">C# 15 · Union types</p><h2>Why it matters: success OR error, checked by the compiler</h2></div>
+  <div class="row" style="gap:36px">
+    <div class="col" style="width:790px;gap:14px"><span class="ba-h ba-old">Before: base class</span><div class="code" style="font-size:24px;padding:24px 30px;"><span class="k">abstract</span> <span class="k">record</span> Result;
+<span class="k">record</span> Ok(<span class="k">int</span> Value) : Result;
+<span class="k">record</span> Error(<span class="k">string</span> Message) : Result;
+
+<span class="k">string</span> Show(Result r) =&gt; r <span class="k">switch</span>
+{
+    Ok ok     =&gt; <span class="s">$&quot;OK: {ok.Value}&quot;</span>,
+    Error err =&gt; <span class="s">$&quot;Error: {err.Message}&quot;</span>,
+    _ =&gt; <span class="k">throw</span> <span class="k">new</span> UnreachableException(),
+};</div></div>
+    <div class="col" style="width:790px;gap:14px"><span class="ba-h ba-new">C# 15: union</span><div class="code" style="font-size:24px;padding:24px 30px;"><span class="k">record</span> Ok(<span class="k">int</span> Value);
+<span class="k">record</span> Error(<span class="k">string</span> Message);
+<span class="k">union</span> Result(Ok, Error);
+
+<span class="k">string</span> Show(Result r) =&gt; r <span class="k">switch</span>
+{
+    Ok ok     =&gt; <span class="s">$&quot;OK: {ok.Value}&quot;</span>,
+    Error err =&gt; <span class="s">$&quot;Error: {err.Message}&quot;</span>,
+};</div></div>
+  </div>
+  <div class="row" style="gap:36px"><p class="note"><b>Before:</b> anyone can add another subclass, so the compiler insists on a <span class="m">_ =&gt;</span> fallback.</p><p class="note"><b>Now:</b> the set of cases is fixed. Ok and Error don't even need a common base class.</p></div>
+  <p class="foot-l">.NET 11 · C# 15</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">C# 15 · Closed hierarchies</p><h2>A class family nobody else can extend</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:23px;padding:24px 32px">Console.WriteLine(Describe(<span class="k">new</span> Closed()));
+Console.WriteLine(Describe(<span class="k">new</span> Open(40)));
+
+<span class="c">// Every direct child of GateState is handled, so no default arm.</span>
+<span class="k">static</span> <span class="k">string</span> Describe(GateState state) =&gt; state <span class="k">switch</span>
+{
+    Closed =&gt; <span class="s">&quot;closed&quot;</span>,
+    Open(<span class="k">var</span> percent) =&gt; <span class="s">$&quot;{percent}% open&quot;</span>,
+};
+
+<span class="c">// &quot;closed&quot;: only this assembly may derive from GateState.</span>
+<span class="k">public</span> <span class="k">closed</span> <span class="k">record</span> <span class="k">class</span> GateState;
+<span class="k">public</span> <span class="k">record</span> <span class="k">class</span> Closed : GateState;
+<span class="k">public</span> <span class="k">record</span> <span class="k">class</span> Open(<span class="k">float</span> Percent) : GateState;</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note"><span class="m">closed</span>: only <b>this assembly</b> can derive from GateState.</p><p class="note">So the compiler knows <b>all</b> children and the switch needs no <span class="m">default</span>.</p><p class="note">A closed class is automatically <span class="m">abstract</span>.</p><p class="tip">Unions combine types that already exist. Closed hierarchies are a family you design with a shared base.</p><div class="term" style="font-size:24px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 03-closed-hierarchies.cs</span>
+closed
+40% open</div></div></div>
+  <p class="foot-l">.NET 11 · C# 15</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">C# 15 · Union or closed?</p><h2>Which one should I use?</h2></div>
+  <div class="row"><table style="flex:1"><tr><th>Situation</th><th>Use</th></tr><tr><td>The cases already exist and are unrelated (<span class="m">int</span>, <span class="m">string</span>, a library type)</td><td><b>union</b></td></tr><tr><td>You design the types and they share a base (properties, methods)</td><td><b>closed</b> hierarchy</td></tr><tr><td>A function returns success <i>or</i> an error</td><td><b>union</b></td></tr><tr><td>A public JSON API contract</td><td><b>closed</b> + a type discriminator</td></tr><tr><td>You need exhaustive <span class="m">switch</span> checks</td><td>both ✔</td></tr></table><div class="col" style="width:560px"><p class="note">System.Text.Json writes a union as its <b>active case only</b>: <span class="m">"hello"</span>, no <span class="m">$type</span>.</p><p class="note">That's why Microsoft suggests a closed hierarchy with a discriminator for new API contracts.</p></div></div>
+  <p class="foot-l">.NET 11 · C# 15</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">C# 15 · Collection expression arguments</p><h2>Pass constructor arguments inside [ ]</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:24px;padding:24px 32px"><span class="k">string</span>[] values = [<span class="s">&quot;one&quot;</span>, <span class="s">&quot;two&quot;</span>, <span class="s">&quot;three&quot;</span>];
+
+<span class="c">// with(...) passes a capacity to List&lt;T&gt;&#x27;s constructor</span>
+List&lt;<span class="k">string</span>&gt; names = [<span class="k">with</span>(capacity: 10), .. values];
+Console.WriteLine(<span class="s">$&quot;Capacity: {names.Capacity}&quot;</span>);
+
+<span class="c">// with(...) passes a comparer to HashSet&lt;T&gt;&#x27;s constructor</span>
+HashSet&lt;<span class="k">string</span>&gt; <span class="k">set</span> =
+    [<span class="k">with</span>(StringComparer.OrdinalIgnoreCase), <span class="s">&quot;Hi&quot;</span>, <span class="s">&quot;HI&quot;</span>, <span class="s">&quot;hi&quot;</span>];
+
+<span class="c">// All three are equal when case is ignored</span>
+Console.WriteLine(<span class="s">$&quot;{set.Count} item&quot;</span>);</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note"><span class="m">with(...)</span> must be the <b>first</b> element.</p><p class="note">Its arguments go to the collection's constructor: capacity, comparer, …</p><p class="note">Before, you had to drop the <span class="m">[ ]</span> syntax and write <span class="m">new HashSet&lt;string&gt;(comparer) { … }</span>.</p><div class="term" style="font-size:20px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 04-collection-expression-args.cs</span>
+Capacity: 10
+1 item</div></div></div>
+  <p class="foot-l">.NET 11 · C# 15</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">C# 15 · Extension indexers</p><h2>Add an indexer to a type you don't own</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:23px;padding:24px 32px">IEnumerable&lt;<span class="k">int</span>&gt; numbers = Enumerable.Range(1, 10);
+
+<span class="c">// Indexing an IEnumerable&lt;int&gt;, thanks to the extension</span>
+Console.WriteLine(numbers[2]);
+
+<span class="k">public</span> <span class="k">static</span> <span class="k">class</span> SequenceIndexer
+{
+    <span class="k">extension</span>(IEnumerable&lt;<span class="k">int</span>&gt; sequence)
+    {
+        <span class="k">public</span> <span class="k">int</span> <span class="k">this</span>[<span class="k">int</span> index] =&gt; sequence.ElementAt(index);
+    }
+}</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note">C# 14 introduced <span class="m">extension</span> blocks (extension properties).</p><p class="note">C# 15 lets them declare <b>indexers</b>: <span class="m">this[int index]</span>.</p><p class="note">The receiver needs a name (here <span class="m">sequence</span>), because indexers are instance members.</p><p class="tip">ElementAt walks the sequence: fine for demos, slow for big lists.</p><div class="term" style="font-size:24px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 05-extension-indexers.cs</span>
+3</div></div></div>
+  <p class="foot-l">.NET 11 · C# 15</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:30px">
+  <div><p class="eyebrow">C# 15 · Labeled break and continue</p><h2>Leave nested loops without flags or goto</h2></div>
+  <div class="row" style="gap:36px">
+    <div class="col" style="width:790px;gap:14px"><span class="ba-h ba-old">Before: a flag</span><div class="code" style="font-size:22px;padding:24px 30px;"><span class="k">bool</span> found = <span class="k">false</span>;
+<span class="k">for</span> (<span class="k">int</span> row = 0; row &lt; grid.Length; row++)
+{
+    <span class="k">for</span> (<span class="k">int</span> col = 0; col &lt; grid[row].Length; col++)
+    {
+        <span class="k">if</span> (grid[row][col] == 99)
+        {
+            found = <span class="k">true</span>;
+            <span class="k">break</span>;          <span class="c">// only the inner loop</span>
+        }
+    }
+    <span class="k">if</span> (found) <span class="k">break</span>;       <span class="c">// and again here</span>
+}</div></div>
+    <div class="col" style="width:790px;gap:14px"><span class="ba-h ba-new">C# 15: labels</span><div class="code" style="font-size:22px;padding:24px 30px;">outer: <span class="k">for</span> (<span class="k">int</span> row = 0; row &lt; grid.Length; row++)
+{
+    <span class="k">for</span> (<span class="k">int</span> col = 0; col &lt; grid[row].Length; col++)
+    {
+        <span class="k">if</span> (grid[row][col] == -1)
+            <span class="k">continue</span> outer; <span class="c">// next row</span>
+
+        <span class="k">if</span> (grid[row][col] == 99)
+            <span class="k">break</span> outer;    <span class="c">// leave both loops</span>
+    }
+}</div></div>
+  </div>
+  <div class="row" style="gap:36px"><p class="note">Put a label on the loop, then <span class="m">break outer</span> or <span class="m">continue outer</span>.</p><p class="note">Example 06 output: <span class="m">1 2 5 6 7 8 9</span></p></div>
+  <p class="foot-l">.NET 11 · C# 15</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">C# 15 · Memory safety (preview)</p><h2>unsafe marks where memory is actually read</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:25px;padding:24px 32px"><span class="c">#:property LangVersion=preview</span>
+<span class="c">#:property AllowUnsafeBlocks=true</span>
+
+<span class="k">int</span> number = 42;
+
+<span class="c">// Taking an address: no &quot;unsafe&quot; needed any more</span>
+<span class="k">int</span>* pointer = &amp;number;
+
+<span class="c">// Reading the memory: still needs &quot;unsafe&quot;</span>
+<span class="k">int</span> value = <span class="k">unsafe</span>(*pointer);
+Console.WriteLine(value);</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note"><b>Preview:</b> needs <span class="m">LangVersion=preview</span>.</p><p class="note">Taking an address (<span class="m">&amp;number</span>) is safe now: nothing is read yet.</p><p class="note">Reading through the pointer is still <span class="m">unsafe</span>. New: <span class="m">unsafe(expr)</span> for one expression.</p><p class="tip">Goal: reviewers find every risky memory access by searching for <b>unsafe</b>.</p><div class="term" style="font-size:24px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 07-memory-safety.cs</span>
+42</div></div></div>
+  <p class="foot-l">.NET 11 · C# 15</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section class="dark" style="flex-direction:row;align-items:center;gap:100px">
+  <div style="width:640px;display:flex;flex-direction:column;gap:20px">
+    <p class="num">PART</p><p class="big">2</p>
+    <h1 style="font-size:80px">Libraries</h1>
+    <p style="font-size:30px;line-height:1.4">New APIs that remove boilerplate you write every week.</p></div>
+  <div style="flex:1" class="toc"><p class="num" style="font-size:22px;margin-bottom:10px">IN THIS PART</p><div><span>Process: run and capture</span><span>01</span></div><div><span>LINQ FullJoin and tuple Join</span><span>02</span></div><div><span>EqualityComparer.Create, generic Random</span><span>03</span></div><div><span>JSON unions and JSON Lines</span><span>04</span></div><div><span>StringStream and Zstandard</span><span>05</span></div><div><span>Async validation</span><span>06</span></div><div><span>Decimal32 / 64 / 128</span><span>07</span></div></div>
+  <p class="foot-l">.NET 11: What's new · Part 2</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:30px">
+  <div><p class="eyebrow">Libraries · Process</p><h2>Run a command and read its output</h2></div>
+  <div class="row" style="gap:36px">
+    <div class="col" style="width:790px;gap:14px"><span class="ba-h ba-old">Before: 10 lines</span><div class="code" style="font-size:20px;padding:24px 30px;"><span class="k">var</span> psi = <span class="k">new</span> ProcessStartInfo(<span class="s">&quot;dotnet&quot;</span>, <span class="s">&quot;--version&quot;</span>)
+{
+    RedirectStandardOutput = <span class="k">true</span>,
+    RedirectStandardError  = <span class="k">true</span>,
+};
+<span class="k">using</span> <span class="k">var</span> p = Process.Start(psi)!;
+<span class="k">string</span> output = <span class="k">await</span> p.StandardOutput.ReadToEndAsync();
+<span class="k">await</span> p.WaitForExitAsync();   <span class="c">// forget this: wrong code</span>
+Console.WriteLine(output);
+Console.WriteLine(p.ExitCode);</div></div>
+    <div class="col" style="width:790px;gap:14px"><span class="ba-h ba-new">.NET 11: 1 call</span><div class="code" style="font-size:24px;padding:24px 30px;">ProcessTextOutput result =
+    <span class="k">await</span> Process.RunAndCaptureTextAsync(
+        <span class="s">&quot;dotnet&quot;</span>, [<span class="s">&quot;--version&quot;</span>]);
+
+Console.WriteLine(result.StandardOutput);
+Console.WriteLine(result.ExitStatus.ExitCode);</div></div>
+  </div>
+  <div class="row" style="gap:36px"><p class="note">Output of example 01: <span class="m">Output:    11.0.100 · Exit code: 0</span></p><p class="note">Also new: <span class="m">Process.Run</span>, <span class="m">StartAndForget</span>, <span class="m">KillOnParentExit</span> (Windows), <span class="m">Signal(PosixSignal)</span>.</p></div>
+  <p class="foot-l">.NET 11 · Libraries</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">Libraries · LINQ</p><h2>FullJoin, and Join that returns tuples</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:22px;padding:24px 32px">(<span class="k">int</span> Id, <span class="k">string</span> Name, <span class="k">string</span>? Category)[] products =
+    [(1, <span class="s">&quot;Laptop&quot;</span>, <span class="s">&quot;Electronics&quot;</span>), (2, <span class="s">&quot;Cable&quot;</span>, <span class="k">null</span>)];
+(<span class="k">string</span> Name, <span class="k">string</span> Text)[] categories =
+    [(<span class="s">&quot;Electronics&quot;</span>, <span class="s">&quot;Devices&quot;</span>), (<span class="s">&quot;Furniture&quot;</span>, <span class="s">&quot;Desks&quot;</span>)];
+
+<span class="c">// FullJoin: both sides, paired where they match</span>
+<span class="k">var</span> full = products.FullJoin(categories,
+    p =&gt; p.Category, c =&gt; c.Name);
+<span class="k">foreach</span> (<span class="k">var</span> (p, c) <span class="k">in</span> full)
+    Console.WriteLine(<span class="s">$&quot;{p.Name ?? &quot;</span>-<span class="s">&quot;} | {c.Text ?? &quot;</span>-<span class="s">&quot;}&quot;</span>);
+
+<span class="c">// Join without a result selector returns tuples</span>
+(<span class="k">int</span> ProductId, <span class="k">int</span> Qty)[] orders = [(1, 3), (1, 1)];
+<span class="k">var</span> joined = products.Join(orders, p =&gt; p.Id, o =&gt; o.ProductId);
+<span class="k">foreach</span> (<span class="k">var</span> (p, o) <span class="k">in</span> joined)
+    Console.WriteLine(<span class="s">$&quot;{p.Name}: qty {o.Qty}&quot;</span>);</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note"><b>FullJoin</b>: every item from <b>both</b> sides, <span class="m">null</span> where there's no match.</p><p class="note"><b>Join</b> without a result selector gives you <span class="m">(outer, inner)</span> tuples to deconstruct.</p><p class="note">LeftJoin/RightJoin came in .NET 10. EF Core 11 turns FullJoin into SQL <b>FULL OUTER JOIN</b>.</p><div class="term" style="font-size:24px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 02-linq-joins.cs</span>
+Laptop | Devices
+Cable | -
+- | Desks
+Laptop: qty 3
+Laptop: qty 1</div></div></div>
+  <p class="foot-l">.NET 11 · Libraries</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">Libraries · Small helpers</p><h2>Comparers from a lambda, random numbers of any type</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:23px;padding:24px 32px"><span class="c">// Compare people by name only: no custom comparer class</span>
+<span class="k">var</span> byName = EqualityComparer&lt;Person&gt;.Create(p =&gt; p.Name);
+
+<span class="k">var</span> people = <span class="k">new</span> HashSet&lt;Person&gt;(byName)
+{
+    <span class="k">new</span>(<span class="s">&quot;Alice&quot;</span>, 30),
+    <span class="k">new</span>(<span class="s">&quot;Bob&quot;</span>, 25),
+    <span class="k">new</span>(<span class="s">&quot;Alice&quot;</span>, 40),   <span class="c">// same name: not added</span>
+};
+Console.WriteLine(<span class="s">$&quot;People: {people.Count}&quot;</span>);
+
+<span class="c">// Random numbers of any numeric type</span>
+<span class="k">long</span> l = Random.Shared.NextInteger&lt;<span class="k">long</span>&gt;(0, 100);
+Half h = Random.Shared.NextBinaryFloat&lt;Half&gt;();
+Console.WriteLine(<span class="s">$&quot;long={l}, Half={h}&quot;</span>);
+
+<span class="k">record</span> Person(<span class="k">string</span> Name, <span class="k">int</span> Age);</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note"><span class="m">EqualityComparer&lt;T&gt;.Create(p =&gt; p.Name)</span>: compare by a key, no custom class.</p><p class="note"><span class="m">NextInteger&lt;T&gt;</span>: any integer type. <span class="m">NextBinaryFloat&lt;T&gt;</span>: float, double, Half.</p><p class="note">The random numbers differ on every run.</p><div class="term" style="font-size:23px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 03-comparer-and-random.cs</span>
+People: 2
+long=17, Half=0.874</div></div></div>
+  <p class="foot-l">.NET 11 · Libraries</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">Libraries · System.Text.Json</p><h2>Unions and JSON Lines</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:22px;padding:24px 32px"><span class="c">// File-based apps use Native AOT, which turns off reflection JSON:</span>
+<span class="c">#:property PublishAot=false</span>
+<span class="k">using</span> System.IO.Pipelines;
+<span class="k">using</span> System.Text.Json;
+
+<span class="c">// 1) A union is written as its active case: no wrapper</span>
+Reading reading = <span class="s">&quot;hello&quot;</span>;
+Console.WriteLine(JsonSerializer.Serialize(reading));
+reading = 42;
+Console.WriteLine(JsonSerializer.Serialize(reading));
+
+<span class="c">// 2) JSON Lines: one value per line</span>
+<span class="k">var</span> pipe = PipeWriter.Create(Console.OpenStandardOutput());
+<span class="k">await</span> JsonSerializer.SerializeAsyncEnumerable(
+    pipe, AsyncEnumerable.Range(1, 3), topLevelValues: <span class="k">true</span>);
+<span class="k">await</span> pipe.CompleteAsync();
+
+<span class="k">public</span> <span class="k">union</span> Reading(<span class="k">int</span>, <span class="k">string</span>);</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note">A union is serialized as its <b>active case</b>: no wrapper object, no <span class="m">$type</span>.</p><p class="note"><span class="m">topLevelValues: true</span> writes <b>JSON Lines</b>: one value per line.</p><p class="note">JSON Lines suits logs and streams: read and write one line at a time.</p><div class="term" style="font-size:22px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 04-json-unions-and-jsonl.cs</span>
+&quot;hello&quot;
+42
+1
+2
+3</div></div></div>
+  <p class="foot-l">.NET 11 · Libraries</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">Libraries · Streams & compression</p><h2>No-copy streams and built-in Zstandard</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:23px;padding:24px 32px"><span class="k">using</span> System.IO.Compression;
+<span class="k">using</span> System.Text;
+
+<span class="k">string</span> text = <span class="k">string</span>.Concat(Enumerable.Repeat(<span class="s">&quot;dotnet &quot;</span>, 1000));
+
+<span class="c">// StringStream: a string as a Stream, no byte[] copy</span>
+<span class="k">using</span> <span class="k">var</span> source = <span class="k">new</span> StringStream(text, Encoding.UTF8);
+
+<span class="c">// Zstandard: built in, next to GZip and Brotli</span>
+<span class="k">using</span> <span class="k">var</span> packed = <span class="k">new</span> MemoryStream();
+<span class="k">using</span> (<span class="k">var</span> zstd = <span class="k">new</span> ZstandardStream(packed,
+           CompressionMode.Compress, leaveOpen: <span class="k">true</span>))
+{
+    source.CopyTo(zstd);
+}
+Console.WriteLine(<span class="s">$&quot;Before: {text.Length:N0} bytes&quot;</span>);
+Console.WriteLine(<span class="s">$&quot;After:  {packed.Length:N0} bytes&quot;</span>);</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note"><b>StringStream</b>, <b>ReadOnlyMemoryStream</b>, <b>WritableMemoryStream</b>, <b>ReadOnlySequenceStream</b>: wrap data without copying it into a MemoryStream.</p><p class="note"><b>ZstandardStream</b> is now in System.IO.Compression, next to GZip and Brotli.</p><p class="note">Zstandard: fast, with good compression; widely used for logs and backups.</p><div class="term" style="font-size:22px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 05-streams-and-zstandard.cs</span>
+Before: 7,000 bytes
+After:  24 bytes</div></div></div>
+  <p class="foot-l">.NET 11 · Libraries</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">Libraries · Async validation</p><h2>Validation that can await a database or API</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:20px;padding:24px 32px"><span class="k">using</span> System.ComponentModel.DataAnnotations;
+
+<span class="k">var</span> invoice = <span class="k">new</span> Invoice(<span class="s">&quot;DE000&quot;</span>);
+<span class="k">var</span> errors = <span class="k">new</span> List&lt;ValidationResult&gt;();
+<span class="k">bool</span> ok = <span class="k">await</span> Validator.TryValidateObjectAsync(
+    invoice, <span class="k">new</span> ValidationContext(invoice), errors, <span class="k">true</span>);
+Console.WriteLine(ok ? <span class="s">&quot;Valid&quot;</span> : errors[0].ErrorMessage);
+
+<span class="k">record</span> Invoice([property: VatRegistered] <span class="k">string</span> VatNumber);
+<span class="k">class</span> VatRegisteredAttribute : AsyncValidationAttribute
+{
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">async</span> Task&lt;ValidationResult?&gt; IsValidAsync(
+        <span class="k">object</span>? value, ValidationContext ctx, CancellationToken ct)
+    {
+        <span class="k">await</span> Task.Delay(100, ct);   <span class="c">// e.g. ask the tax office</span>
+        <span class="k">return</span> value <span class="k">is</span> <span class="s">&quot;DE123&quot;</span> ? ValidationResult.Success
+            : <span class="k">new</span> ValidationResult(<span class="s">&quot;VAT number not registered.&quot;</span>);
+    }
+    <span class="k">protected</span> <span class="k">override</span> ValidationResult? IsValid(<span class="k">object</span>? value,
+        ValidationContext ctx) =&gt; <span class="k">throw</span> <span class="k">new</span> NotSupportedException();
+}</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note">Before: <span class="m">IsValid</span> was synchronous, so a database check blocked with <span class="m">.Result</span>.</p><p class="note">Now: derive from <b>AsyncValidationAttribute</b> and put the work in <b>IsValidAsync</b>.</p><p class="note">Run it with <span class="m">Validator.TryValidateObjectAsync</span>. ASP.NET Core 11 uses it too.</p><p class="note">The sync <span class="m">IsValid</span> must still be overridden, but it's never called.</p><div class="term" style="font-size:24px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 06-async-validation.cs</span>
+VAT number not registered.</div></div></div>
+  <p class="foot-l">.NET 11 · Libraries</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">Libraries · Numerics</p><h2>Exact decimal math: Decimal32, Decimal64, Decimal128</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:24px;padding:24px 32px"><span class="k">using</span> System.Numerics;
+
+<span class="k">double</span> d = 0.1 + 0.2;
+Decimal64 x = Decimal64.Parse(<span class="s">&quot;0.1&quot;</span>) + Decimal64.Parse(<span class="s">&quot;0.2&quot;</span>);
+
+Console.WriteLine(<span class="s">$&quot;double:    {d:R}&quot;</span>);
+Console.WriteLine(<span class="s">$&quot;Decimal64: {x}&quot;</span>);</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note"><span class="m">double</span> is binary: 0.1 + 0.2 is <b>not</b> exactly 0.3.</p><p class="note">The new types follow the <b>IEEE 754 decimal</b> standard, so 0.1 + 0.2 = 0.3.</p><p class="note">Use them to exchange data with other IEEE systems; <span class="m">decimal</span> is still fine for money.</p><div class="term" style="font-size:24px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 07-decimal-types.cs</span>
+double:    0.30000000000000004
+Decimal64: 0.3</div></div></div>
+  <p class="foot-l">.NET 11 · Libraries</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">Libraries · Also new</p><h2>More additions worth knowing</h2></div>
+  <div class="row"><table style="flex:1"><tr><th>Area</th><th>What's new</th></tr><tr><td>Compression</td><td>ZIP entries are <b>CRC32-checked</b>: corrupt files now throw <span class="m">InvalidDataException</span></td></tr><tr><td>Base64</td><td><span class="m">EncodeToString</span>, <span class="m">DecodeFromChars</span>, UTF-8 and span versions</td></tr><tr><td>Security</td><td><span class="m">X25519DiffieHellman</span> key exchange, AES Key Wrap, experimental ML-KEM / HPKE</td></tr><tr><td>Networking</td><td>Typed DNS lookups (<span class="m">DnsResolver</span>: SRV, MX, TXT), HTTP request compression</td></tr><tr><td>Observability</td><td>Built-in OpenTelemetry metrics for <span class="m">MemoryCache</span></td></tr><tr><td>Console</td><td><span class="m">FORCE_COLOR=1</span> keeps colours when output is redirected</td></tr></table></div>
+  <p class="foot-l">.NET 11 · Libraries</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section class="dark" style="flex-direction:row;align-items:center;gap:100px">
+  <div style="width:640px;display:flex;flex-direction:column;gap:20px">
+    <p class="num">PART</p><p class="big">3</p>
+    <h1 style="font-size:80px">Runtime</h1>
+    <p style="font-size:30px;line-height:1.4">Most of this you get for free: just retarget to net11.0.</p></div>
+  <div style="flex:1" class="toc"><p class="num" style="font-size:22px;margin-bottom:10px">IN THIS PART</p><div><span>Runtime Async</span><span>01, 02</span></div><div><span>JIT: faster with no code changes</span><span>-</span></div><div><span>SIMD lane APIs</span><span>03</span></div><div><span>New minimum CPU requirements</span><span>-</span></div></div>
+  <p class="foot-l">.NET 11: What's new · Part 3</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:30px">
+  <div><p class="eyebrow">Runtime · Runtime Async</p><h2>The runtime runs async methods itself</h2></div>
+  <div class="row" style="gap:36px">
+    <div class="col" style="width:790px;gap:14px"><span class="ba-h ba-old">Compiler state machines: 13 frames</span><div class="code" style="font-size:22px;padding:24px 30px;min-height:520px">   at InnerAsync()
+   at AsyncMethodBuilderCore.Start(...)
+   at InnerAsync()
+   at MiddleAsync()
+   at AsyncMethodBuilderCore.Start(...)
+   at MiddleAsync()
+   at OuterAsync()
+   at AsyncMethodBuilderCore.Start(...)
+   at OuterAsync()
+   at &lt;Main&gt;$(args)
+   at AsyncMethodBuilderCore.Start(...)
+   at &lt;Main&gt;$(args)
+   at Main(args)</div></div>
+    <div class="col" style="width:790px;gap:14px"><span class="ba-h ba-new">Runtime Async: 5 frames</span><div class="code" style="font-size:22px;padding:24px 30px;min-height:520px">   at InnerAsync()
+   at MiddleAsync()
+   at OuterAsync()
+   at &lt;Main&gt;$(args)
+   at Main(args)</div></div>
+  </div>
+  <div class="row" style="gap:36px"><p class="note">Same program (examples 01 and 02): Outer → Middle → Inner, then print <span class="m">new StackTrace()</span>.</p><p class="note">Turn it on: <span class="m">&lt;Features&gt;runtime-async=on&lt;/Features&gt;</span>. Fewer frames: clearer debugging and profiling, less overhead.</p></div>
+  <p class="foot-l">.NET 11 · Runtime</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">Runtime · JIT</p><h2>Faster code, no changes needed</h2></div>
+  <div class="row"><table style="flex:1"><tr><th>Improvement</th><th>Code that gets faster</th></tr><tr><td>Fewer bounds checks</td><td><span class="m">values[^1]</span>, <span class="m">if (!span.IsEmpty &amp;&amp; span[0] == x)</span></td></tr><tr><td>Constant folding</td><td><span class="m">role == "Admin"</span> with a known role becomes true/false</td></tr><tr><td>Devirtualization</td><td>generic virtual methods, default interface methods</td></tr><tr><td>Cheaper async</td><td>no ExecutionContext copy when you don't use AsyncLocal</td></tr><tr><td>Faster math</td><td><span class="m">Math.BigMul</span> on x64 is one MUL instruction</td></tr><tr><td>ReadyToRun</td><td>default comparers precompiled: up to <b>20×</b> faster collection ops</td></tr><tr><td>Linux</td><td><span class="m">Guid.NewGuid()</span> about <b>12%</b> faster</td></tr></table><div class="col" style="width:620px"><p class="tip">Measure your own app: run your benchmarks on .NET 10 and .NET 11.</p></div></div>
+  <p class="foot-l">.NET 11 · Runtime</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">Runtime · SIMD</p><h2>Build and shuffle vector lanes</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:24px;padding:24px 32px"><span class="k">using</span> System.Runtime.Intrinsics;
+
+<span class="c">// Start at 1, multiply by 2 for each lane: 1, 2, 4, 8</span>
+<span class="k">var</span> powers = Vector128.CreateGeometricSequence(1, 2);
+Console.WriteLine(powers);
+
+<span class="c">// Interleave two vectors, lane by lane</span>
+<span class="k">var</span> a = Vector128.Create(1, 2, 3, 4);
+<span class="k">var</span> b = Vector128.Create(10, 20, 30, 40);
+<span class="k">var</span> (lower, upper) = Vector128.Zip(a, b);
+Console.WriteLine(<span class="s">$&quot;{lower} {upper}&quot;</span>);</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note"><span class="m">CreateGeometricSequence(1, 2)</span>: 1, 2, 4, 8.</p><p class="note"><span class="m">Zip</span> interleaves two vectors lane by lane; <span class="m">Unzip</span> splits them again.</p><p class="note">Works on <span class="m">Vector64/128/256/512</span> and <span class="m">Vector&lt;T&gt;</span>. Also: hardware FP16 for <span class="m">Half</span>.</p><div class="term" style="font-size:24px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run 03-simd-lanes.cs</span>
+&lt;1, 2, 4, 8&gt;
+&lt;1, 10, 2, 20&gt; &lt;3, 30, 4, 40&gt;</div></div></div>
+  <p class="foot-l">.NET 11 · Runtime</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">Runtime · Hardware</p><h2>New minimum CPU requirements</h2></div>
+  <div class="row"><table style="flex:1"><tr><th>CPU</th><th>.NET 10</th><th>.NET 11</th></tr><tr><td>x64 (Windows, Linux, macOS)</td><td>x86-64-v1</td><td><b>x86-64-v2</b> (adds SSE4.2, POPCNT)</td></tr><tr><td>Arm64 on Windows</td><td>armv8.0-a</td><td><b>armv8.0-a + LSE</b></td></tr><tr><td>Arm64 on Linux / Apple</td><td>unchanged</td><td>unchanged (Raspberry Pi still works)</td></tr></table><div class="col" style="width:600px"><p class="note">Every Intel and AMD CPU still supported by its vendor qualifies (older ones went out of support around 2013).</p><p class="note">Windows 11 already requires this level.</p><p class="tip">On an older CPU, .NET 11 stops with: "The current CPU is missing one or more of the baseline instruction sets."</p></div></div>
+  <p class="foot-l">.NET 11 · Runtime</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section class="dark" style="flex-direction:row;align-items:center;gap:100px">
+  <div style="width:640px;display:flex;flex-direction:column;gap:20px">
+    <p class="num">PART</p><p class="big">4</p>
+    <h1 style="font-size:80px">SDK & tooling</h1>
+    <p style="font-size:30px;line-height:1.4">A faster CLI, scripts that grow up, and better tests.</p></div>
+  <div style="flex:1" class="toc"><p class="num" style="font-size:22px;margin-bottom:10px">IN THIS PART</p><div><span>File-based apps: #:include</span><span>app.cs</span></div><div><span>dotnet run -e</span><span>app.cs</span></div><div><span>A faster dotnet CLI</span><span>-</span></div><div><span>dotnet test and other commands</span><span>-</span></div></div>
+  <p class="foot-l">.NET 11: What's new · Part 4</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section style="gap:34px">
+  <div><p class="eyebrow">SDK · File-based apps</p><h2>One-file apps can now span several files</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:23px;padding:24px 32px"><span class="c">#:include helpers.cs</span>
+<span class="c">#:include models/customer.cs</span>
+
+<span class="k">var</span> customer = <span class="k">new</span> Customer(<span class="s">&quot;Vishal&quot;</span>, <span class="s">&quot;Augsburg&quot;</span>);
+<span class="k">var</span> greeting = Environment.GetEnvironmentVariable(<span class="s">&quot;GREETING&quot;</span>);
+
+Console.WriteLine(Helpers.Format(greeting ?? <span class="s">&quot;Hello&quot;</span>, customer));</div>
+  <div class="col" style="width:616px;gap:20px"><p class="note"><span class="m">dotnet run app.cs</span>: no .csproj needed (since .NET 10).</p><p class="note">New: <span class="m">#:include helpers.cs</span> pulls in other files, even a <span class="m">.dll</span>.</p><p class="note">New: <span class="m">dotnet run -e KEY=VALUE</span> passes environment variables.</p><p class="note">Without <span class="m">-e</span>: <span class="m">Hello, Vishal from Augsburg!</span></p><div class="term" style="font-size:24px"><span class="lbl">OUTPUT</span><span class="cmd">$ dotnet run -e GREETING=Hallo app.cs</span>
+Hallo, Vishal from Augsburg!</div></div></div>
+  <p class="foot-l">.NET 11 · SDK & tooling</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">SDK · Speed</p><h2>A faster dotnet CLI, out of the box</h2></div>
+  <div class="kpi">
+    <div><b>Native AOT</b><span>The <span class="m">dotnet</span> CLI starts natively. Tools like <span class="m">dotnet ef</span> skip 600–700 ms of startup.</span></div>
+    <div><b>On</b><span>The MSBuild server is on by default: a warm worker between builds.</span></div>
+    <div><b>−18%</b><span>Linux SDK tarball: 230 → 189 MB (deb/rpm: −26%).</span></div>
+    <div><b>10–13%</b><span>Faster project evaluation with many files (new wildcard matching).</span></div>
+  </div>
+  <div class="row"><p class="note" style="flex:1">Nothing to configure: install the SDK and you get all four.</p>
+  <p class="tip" style="flex:1">Opt out if needed: <b>DOTNET_CLI_ENABLEAOT=false</b>, <b>DOTNET_CLI_USE_MSBUILD_SERVER=false</b>.</p></div>
+  <p class="foot-l">.NET 11 · SDK & tooling</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">SDK · Commands</p><h2>New options worth trying</h2></div>
+  <div class="row"><div class="code" style="width:1020px;font-size:23px"><span class="c"># Tests: stop after 90 s, or after 5 failures</span>
+<span class="g">$</span> dotnet test --timeout 90s
+<span class="g">$</span> dotnet test --maximum-failed-tests 5
+
+<span class="c"># Solution filters from the CLI</span>
+<span class="g">$</span> dotnet new slnf --parent-solution App.slnx --name Tests
+<span class="g">$</span> dotnet sln Tests.slnf add tests/Tests/Tests.csproj
+
+<span class="c"># xUnit v3 template on Microsoft.Testing.Platform</span>
+<span class="g">$</span> dotnet new xunit --xunit-version v3
+
+<span class="c"># Only use NuGet packages published 24+ hours ago</span>
+<span class="g">$</span> dotnet nuget update source nuget.org --min-publish-age-hours 24</div>
+  <div class="col" style="flex:1"><p class="note"><span class="m">dotnet test</span> also shows tests that are <b>running right now</b>, and supports Android and iOS devices.</p><p class="note"><b>Solution filters</b> (.slnf): load only part of a big solution.</p><p class="note"><b>Minimum publish age</b> protects you from a freshly published malicious package.</p></div></div>
+  <p class="foot-l">.NET 11 · SDK & tooling</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">Beyond the core</p><h2>What changes in the frameworks</h2></div>
+  <div class="row"><table style="flex:1"><tr><th>Framework</th><th>Highlights</th></tr><tr><td><b>ASP.NET Core 11</b></td><td>OpenAPI 3.2, async validation, unions in Minimal APIs, MVC, SignalR, Blazor</td></tr><tr><td><b>EF Core 11</b></td><td>Translates FullJoin, MaxBy, MinBy; fewer joins in includes. <b>Breaking:</b> SQL Server compatibility level 160 by default</td></tr><tr><td><b>.NET MAUI</b></td><td>CoreCLR replaces Mono on Android, iOS and Mac Catalyst (opt back: <span class="m">UseMonoRuntime</span>)</td></tr><tr><td><b>AI</b></td><td>MCP C# SDK 2.0, <span class="m">dotnet new mcpserver</span>, Blazor AI components (experimental)</td></tr></table><div class="col" style="width:520px"><p class="note">EF Core 11 requires .NET 11.</p><p class="note">On SQL Server older than 2022, set <span class="m">UseCompatibilityLevel</span> explicitly.</p></div></div>
+  <p class="foot-l">.NET 11 · Ecosystem</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">Upgrade</p><h2>Four steps to .NET 11</h2></div>
+  <div class="row"><div class="code" style="width:960px;font-size:24px"><span class="c">// 1. Install the SDK (11.0.100) and pin it in global.json</span>
+{ <span class="s">&quot;sdk&quot;</span>: { <span class="s">&quot;version&quot;</span>: <span class="s">&quot;11.0.100&quot;</span> } }
+
+<span class="c">// 2. Retarget every project (.csproj)</span>
+&lt;TargetFramework&gt;net11.0&lt;/TargetFramework&gt;
+
+<span class="c">// 3. Update packages: Microsoft.* and EF Core to 11.x</span>
+dotnet package update
+
+<span class="c">// 4. Build, run the tests, read the warnings</span>
+dotnet build
+dotnet test</div>
+  <div class="col" style="flex:1"><p class="note"><b>Check the breaking changes</b> before step 4:</p><p class="note">• CPU baseline x86-64-v2 (old servers / VMs)</p><p class="note">• ZIP files now CRC32-checked</p><p class="note">• EF Core: SQL Server compatibility 160</p><p class="note">• MAUI: CoreCLR instead of Mono</p><p class="tip">C# 15 comes automatically with net11.0. No LangVersion change needed.</p></div></div>
+  <p class="foot-l">.NET 11 · Upgrade</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section>
+  <div><p class="eyebrow">Try it yourself</p><h2>Every example in this talk runs with one command</h2></div>
+  <div class="row"><div class="code" style="width:1000px;font-size:24px"><span class="g">$</span> git clone https://github.com/CodeMitVishal/dotnet11-whats-new
+<span class="g">$</span> cd dotnet11-whats-new/examples/01-csharp15
+<span class="g">$</span> dotnet run 01-union-types.cs
+
+<span class="c"># Run every example and refresh the slide outputs</span>
+<span class="g">$</span> python run_examples.py</div>
+  <div class="col" style="flex:1"><p class="note">Needs the <b>.NET 11 SDK</b> (11.0.100 or later).</p><p class="note">18 small apps: C# 15, libraries, runtime and SDK.</p><p class="note">No project files: each <span class="m">.cs</span> file is a complete app.</p></div></div>
+  <p class="foot-l">.NET 11 · Try it</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+
+<section class="dark" style="justify-content:center;gap:30px">
+  <img src="channel-icon.png" alt="CodeMitVishal logo" style="width:150px;height:150px">
+  <p class="num">THANK YOU</p><h1>Thanks for watching!</h1>
+  <p style="font-size:34px;color:#E6E9F0;max-width:1400px;line-height:1.4">Questions? Open an issue in the repo or ask in the comments.</p>
+  <div style="display:flex;flex-direction:column;gap:14px;font-size:30px;margin-top:20px"><span>youtube.com/@CodeMitVishal</span><span>github.com/CodeMitVishal/dotnet11-whats-new</span><span>learn.microsoft.com/dotnet/core/whats-new/dotnet-11/overview</span></div>
+  <p class="foot-l">Thank you!</p><p class="foot-r">github.com/CodeMitVishal/dotnet11-whats-new</p>
+</section>
+</body></html>
